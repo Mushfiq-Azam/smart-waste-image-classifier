@@ -3,8 +3,8 @@
  * Handles image upload, API communication, and result display
  */
 
-// Configuration
-const API_URL = "http://localhost:8000"; // Change to Render URL in production
+// Configuration is loaded from config.js
+// API_URL is automatically detected based on environment
 const DOM = {
   uploadArea: document.getElementById("upload-area"),
   fileInput: document.getElementById("file-input"),
