@@ -26,6 +26,11 @@ const CONFIG = {
 function getEnvironment() {
   const hostname = window.location.hostname;
 
+  // Local file opened directly in the browser
+  if (window.location.protocol === "file:") {
+    return CONFIG.development;
+  }
+
   // GitHub Pages
   if (hostname.includes("github.io")) {
     return CONFIG.githubPages;

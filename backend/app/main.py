@@ -27,8 +27,15 @@ app = FastAPI(
 # CORS middleware to allow requests from GitHub Pages and other origins
 origins = [
     "http://localhost:3000",
+    "http://localhost:5500",
+    "http://localhost:8000",
     "http://localhost:8080",
     "http://localhost",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5500",
+    "http://127.0.0.1:8000",
+    "http://127.0.0.1:8080",
+    "null",
     "https://mushfiq-azam.github.io",
     "https://localhost",
 ]
@@ -63,13 +70,17 @@ def load_model():
     try:
         from fastai.vision.all import load_learner
 
-        model_path = Path("model_fixed.pkl")
+        model_path = Path(os.getenv("MODEL_PATH", "model_fixed.pkl"))
+        if not model_path.exists():
+            project_model_path = Path(__file__).resolve().parents[1] / "model_fixed.pkl"
+            if project_model_path.exists():
+                model_path = project_model_path
 
         if not model_path.exists():
             logger.error(f"Model file not found at {model_path}")
             return False
 
-        logger.info("Loading model...")
+        logger.info(f"Loading model from {model_path}...")
         model = load_learner(model_path)
         logger.info("Model loaded successfully!")
         return True

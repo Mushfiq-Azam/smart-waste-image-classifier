@@ -168,7 +168,15 @@ async function classifyImage(file) {
     });
 
     if (!response.ok) {
-      throw new Error(await response.text());
+      let message = `Request failed with status ${response.status}`;
+      try {
+        const errorBody = await response.json();
+        message = errorBody.detail || message;
+      } catch (_) {
+        const errorText = await response.text();
+        message = errorText || message;
+      }
+      throw new Error(message);
     }
 
     const result = await response.json();
@@ -181,9 +189,7 @@ async function classifyImage(file) {
   } catch (error) {
     console.error("Classification error:", error);
     DOM.loading.classList.add("hidden");
-    showError(
-      "Failed to classify image. Please check your connection and try again."
-    );
+    showError(`Failed to classify image: ${error.message}`);
   }
 }
 
