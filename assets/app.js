@@ -5,9 +5,16 @@
 
 // Configuration is loaded from config.js
 // API_URL is automatically detected based on environment
+
+// State
+let currentResult = null;
+let classificationHistory = [];
+
 const DOM = {
   uploadArea: document.getElementById("upload-area"),
   fileInput: document.getElementById("file-input"),
+  cameraInput: document.getElementById("camera-input"),
+  themeToggle: document.getElementById("theme-toggle"),
   uploadSection: document.getElementById("upload-section"),
   previewSection: document.getElementById("preview-section"),
   previewImage: document.getElementById("preview-image"),
@@ -25,10 +32,38 @@ const DOM = {
   tipsList: document.getElementById("tips-list"),
   lowConfidenceWarning: document.getElementById("low-confidence-warning"),
   errorText: document.getElementById("error-text"),
+  historyList: document.getElementById("history-list"),
+  clearHistoryBtn: document.getElementById("clear-history-btn"),
 };
 
-// State
-let currentResult = null;
+/* =============================
+   THEME MANAGEMENT
+   ============================= */
+
+function initTheme() {
+  const savedTheme = localStorage.getItem("theme") || "dark-mode";
+  document.documentElement.classList.add(savedTheme);
+  if (savedTheme === "light-mode") {
+    DOM.themeToggle.textContent = "☀️";
+  }
+}
+
+DOM.themeToggle.addEventListener("click", () => {
+  const htmlElement = document.documentElement;
+  const isDarkMode = htmlElement.classList.contains("dark-mode");
+
+  if (isDarkMode) {
+    htmlElement.classList.remove("dark-mode");
+    htmlElement.classList.add("light-mode");
+    DOM.themeToggle.textContent = "☀️";
+    localStorage.setItem("theme", "light-mode");
+  } else {
+    htmlElement.classList.remove("light-mode");
+    htmlElement.classList.add("dark-mode");
+    DOM.themeToggle.textContent = "🌙";
+    localStorage.setItem("theme", "dark-mode");
+  }
+});
 
 /* =============================
    DRAG & DROP HANDLERS
@@ -64,30 +99,37 @@ DOM.fileInput.addEventListener("change", (e) => {
   }
 });
 
+DOM.cameraInput.addEventListener("change", (e) => {
+  const files = e.target.files;
+  if (files.length > 0) {
+    handleFileSelect(files[0]);
+  }
+});
+
+function startCamera() {
+  DOM.cameraInput.click();
+}
+
 function handleFileSelect(file) {
-  // Validate file
   const { valid, message } = validateFile(file);
   if (!valid) {
     showError(message);
     return;
   }
 
-  // Read and preview file
   const reader = new FileReader();
   reader.onload = (e) => {
     DOM.previewImage.src = e.target.result;
     DOM.uploadArea.classList.add("hidden");
     DOM.previewSection.classList.remove("hidden");
     closeError();
-
-    // Auto-classify
     classifyImage(file);
   };
   reader.readAsDataURL(file);
 }
 
 function validateFile(file) {
-  const maxSize = 10 * 1024 * 1024; // 10MB
+  const maxSize = 10 * 1024 * 1024;
   const validTypes = ["image/jpeg", "image/png", "image/webp"];
 
   if (!validTypes.includes(file.type)) {
@@ -113,16 +155,13 @@ function validateFile(file) {
 
 async function classifyImage(file) {
   try {
-    // Show loading
     DOM.loading.classList.remove("hidden");
     DOM.resultSection.classList.add("hidden");
     closeError();
 
-    // Prepare form data
     const formData = new FormData();
     formData.append("file", file);
 
-    // Send to API
     const response = await fetch(`${API_URL}/predict`, {
       method: "POST",
       body: formData,
@@ -135,7 +174,7 @@ async function classifyImage(file) {
     const result = await response.json();
     currentResult = result;
 
-    // Display result
+    addToHistory(result);
     displayResult(result);
     DOM.loading.classList.add("hidden");
     DOM.resultSection.classList.remove("hidden");
@@ -151,16 +190,13 @@ async function classifyImage(file) {
 function displayResult(result) {
   const category = result.category.toLowerCase();
 
-  // Update category badge
   DOM.categoryLabel.textContent = formatCategoryName(result.category);
   DOM.categoryBadge.style.backgroundColor = result.color;
 
-  // Update confidence
   const confidencePercent = Math.round(result.confidence * 100);
   DOM.confidencePercent.textContent = `${confidencePercent}%`;
   DOM.confidenceBar.style.width = `${confidencePercent}%`;
 
-  // Update recyclable status
   if (result.is_recyclable) {
     DOM.recyclableStatus.classList.remove("not-recyclable");
     DOM.recyclableIcon.textContent = "♻️";
@@ -171,14 +207,11 @@ function displayResult(result) {
     DOM.recyclableText.textContent = "Special Disposal Required";
   }
 
-  // Update guidance
   DOM.guidanceText.textContent = result.guidance;
 
-  // Update tips (mock - in real scenario, fetch from categories.py)
   const tips = getCategoryTips(category);
   DOM.tipsList.innerHTML = tips.map((tip) => `<li>${tip}</li>`).join("");
 
-  // Show/hide low confidence warning
   if (confidencePercent < 60) {
     DOM.lowConfidenceWarning.classList.remove("hidden");
   } else {
@@ -261,6 +294,78 @@ function formatCategoryName(category) {
 }
 
 /* =============================
+   HISTORY MANAGEMENT
+   ============================= */
+
+function addToHistory(result) {
+  const entry = {
+    category: result.category,
+    confidence: Math.round(result.confidence * 100),
+    color: result.color,
+    timestamp: new Date().getTime(),
+  };
+
+  classificationHistory.unshift(entry);
+  if (classificationHistory.length > 10) {
+    classificationHistory.pop();
+  }
+
+  saveHistory();
+  updateHistoryDisplay();
+}
+
+function saveHistory() {
+  localStorage.setItem("classificationHistory", JSON.stringify(classificationHistory));
+}
+
+function loadHistory() {
+  const saved = localStorage.getItem("classificationHistory");
+  if (saved) {
+    classificationHistory = JSON.parse(saved);
+  }
+}
+
+function updateHistoryDisplay() {
+  if (classificationHistory.length === 0) {
+    DOM.historyList.innerHTML = '<p class="history-empty">No classifications yet. Start by uploading an image!</p>';
+    DOM.clearHistoryBtn.style.display = "none";
+    return;
+  }
+
+  DOM.clearHistoryBtn.style.display = "block";
+
+  DOM.historyList.innerHTML = classificationHistory
+    .map(
+      (entry, index) => `
+    <div class="history-item" onclick="highlightHistoryItem(${index})">
+      <div class="history-item-category" style="background-color: ${entry.color}">
+        ${formatCategoryName(entry.category)}
+      </div>
+      <div class="history-item-confidence">
+        ${entry.confidence}% confident
+      </div>
+    </div>
+  `
+    )
+    .join("");
+}
+
+function highlightHistoryItem(index) {
+  const entry = classificationHistory[index];
+  alert(
+    `${formatCategoryName(entry.category)}\nConfidence: ${entry.confidence}%`
+  );
+}
+
+function clearHistory() {
+  if (confirm("Clear all classification history?")) {
+    classificationHistory = [];
+    localStorage.removeItem("classificationHistory");
+    updateHistoryDisplay();
+  }
+}
+
+/* =============================
    UI CONTROLLERS
    ============================= */
 
@@ -308,7 +413,6 @@ https://mushfiq-azam.github.io/smart-waste-image-classifier/`;
       text: text,
     });
   } else {
-    // Fallback: copy to clipboard
     navigator.clipboard.writeText(text).then(() => {
       alert("Result copied to clipboard!");
     });
@@ -320,10 +424,11 @@ https://mushfiq-azam.github.io/smart-waste-image-classifier/`;
    ============================= */
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Check API connection on load
+  initTheme();
+  loadHistory();
+  updateHistoryDisplay();
   checkApiConnection();
 
-  // Prevent default drag behavior on entire page
   document.addEventListener("dragover", (e) => e.preventDefault());
   document.addEventListener("drop", (e) => e.preventDefault());
 });

@@ -42,6 +42,9 @@
         <a href="#how-it-works">How It Works</a>
         <a href="#classifier">Classify</a>
         <a href="#footer">About</a>
+        <button id="theme-toggle" class="theme-toggle" title="Toggle dark/light mode">
+          <span class="theme-icon">🌙</span>
+        </button>
       </div>
     </div>
   </nav>
@@ -115,7 +118,13 @@
             Click to browse
           </button>
           <p class="upload-hint">Supported: JPG, PNG, WEBP (Max 10MB)</p>
+          <div class="upload-options">
+            <button type="button" class="btn-upload-option" onclick="startCamera()" id="camera-btn" title="Take a photo">
+              📷 Camera
+            </button>
+          </div>
           <input type="file" id="file-input" hidden accept="image/jpeg,image/png,image/webp">
+          <input type="file" id="camera-input" hidden accept="image/*" capture="environment">
         </div>
 
         <!-- Image Preview -->
@@ -202,6 +211,19 @@
         <span id="error-text">An error occurred</span>
         <button class="error-close" onclick="closeError()">✕</button>
       </div>
+    </div>
+  </section>
+
+  <!-- History Section -->
+  <section id="history-section" class="history-section">
+    <div class="container">
+      <h2>📋 Recent Classifications</h2>
+      <div id="history-list" class="history-list">
+        <p class="history-empty">No classifications yet. Start by uploading an image!</p>
+      </div>
+      <button id="clear-history-btn" class="btn-secondary" onclick="clearHistory()" style="display: none;">
+        🗑️ Clear History
+      </button>
     </div>
   </section>
 
