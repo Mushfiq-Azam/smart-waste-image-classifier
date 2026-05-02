@@ -1,0 +1,79 @@
+name: Testing & Deployment
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ "3.11" ]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+
+      - name: Run tests
+        run: |
+          cd backend
+          pytest --cov=app --cov-report=xml
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./backend/coverage.xml
+          flags: backend
+          fail_ci_if_error: false
+
+  deploy-backend:
+    needs: test-backend
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy to Render
+        run: |
+          # Render auto-deploys on push to main
+          # This is a placeholder for future deployment automation
+          echo "Backend deployment triggered"
+        env:
+          RENDER_DEPLOY_KEY: ${{ secrets.RENDER_DEPLOY_KEY }}
+
+  lint-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Check HTML
+        run: |
+          cd frontend
+          npm install -g html-validate
+          html-validate index.html || true
+
+      - name: Check for common issues
+        run: |
+          cd frontend
+          if grep -r "console.log" assets/app.js | grep -v "//"; then
+            echo "⚠️  Debug console.logs found"
+          fi
+          if grep -r "TODO\|FIXME" assets/app.js; then
+            echo "ℹ️  TODO/FIXME comments found"
+          fi
