@@ -1,0 +1,121 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# Environment variables (CONFIDENTIAL)
+.env
+.env.local
+.env.*.local
+.env.prod
+.env.dev
+config.local.json
+
+# API Keys & Credentials (CONFIDENTIAL)
+secrets/
+*.key
+*.pem
+*.pfx
+credentials.json
+api_keys.json
+auth_tokens.json
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+database/
+.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.cache
+
+# Large model files (keep these out of version control)
+*.pkl
+*.pth
+*.h5
+*.onnx
+models/
+checkpoints/
+model_weights/
+
+# Build outputs
+dist/
+build/
+.next/
+*.min.js
+*.min.css
+
+# Node modules (if using frontend tooling)
+node_modules/
+package-lock.json
+yarn.lock
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Jupyter Notebooks (checkpoint files)
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Upload directories
+uploads/
+temp_uploads/
+user_data/
+
+# Config with secrets
+config.json
+settings.local.json

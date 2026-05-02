@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: smart-waste-classifier
+    runtime: python
+    runtimeVersion: 3.11
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.7
+      - key: PIP_INSTALL_TIMEOUT
+        value: 600
+
+# Deployment configuration
+deploy:
+  # Build script to install dependencies
+  preDeployCommand: pip install --upgrade pip
