@@ -21,18 +21,6 @@ smart-waste-image-classifier/
 │       ├── config.js           Environment config
 │       └── demo.png            Demo screenshot
 │
-├── 📁 backend/                 ← FastAPI server
-│   ├── app/
-│   │   ├── main.py             FastAPI app & endpoints
-│   │   ├── categories.py       Waste categories & guidance
-│   │   ├── utils.py            Image validation/processing
-│   │   ├── startup.py          Model initialization
-│   │   └── __init__.py         Package init
-│   ├── requirements.txt        Python dependencies
-│   ├── Procfile                Render deployment config
-│   ├── runtime.txt             Python version
-│   └── render.yaml             Render service config
-│
 ├── 📁 docs/                    ← Documentation
 │   ├── README.md               Full project documentation
 │   ├── QUICKSTART.md           Local development guide
@@ -60,14 +48,6 @@ smart-waste-image-classifier/
 ## 🚀 Quick Start
 
 ### **Option 1: Local Development**
-
-```bash
-# Backend
-cd backend
-python -m venv venv
-venv\Scripts\activate  # or: source venv/bin/activate
-pip install -r requirements.txt
-python -m uvicorn app.main:app --reload
 
 # Frontend (new terminal)
 cd frontend
@@ -146,7 +126,7 @@ python -m http.server 8080
 
 **Deployment**
 - GitHub Pages (frontend)
-- Render (backend)
+- FastAPI (backend)
 - GitHub Actions (CI/CD ready)
 
 **Model**
