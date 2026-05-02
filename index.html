@@ -1,53 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>Smart Waste Image Classifier</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Waste Classifier — AI-Powered Recycling Guide</title>
+  <meta name="description"
+    content="Upload a waste image and get instant recycling guidance. AI-powered classification using ResNet50.">
+  <meta name="theme-color" content="#2ECC71">
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:title" content="Smart Waste Classifier">
+  <meta property="og:description" content="Upload a photo. Know exactly how to dispose it.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mushfiq-azam.github.io/smart-waste-image-classifier/">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗑️</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+    rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<header>
-  <h1>🗑️ Smart Waste Image Classifier</h1>
-  <p>AI-powered waste classification using Deep Learning (ResNet50)</p>
-</header>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar-brand">
+        <span class="logo">🗑️</span>
+        <span class="brand-text">Smart Waste Classifier</span>
+      </div>
+      <div class="nav-links">
+        <a href="#how-it-works">How It Works</a>
+        <a href="#classifier">Classify</a>
+        <a href="#footer">About</a>
+      </div>
+    </div>
+  </nav>
 
-<section>
-  <h2>📌 Project Overview</h2>
-  <p>
-    This project uses a deep learning model (ResNet50) trained with FastAI
-    to classify waste images into categories such as plastic, glass,
-    battery, food waste, and more.
-  </p>
-</section>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          Smart Waste<br>Image Classifier
+        </h1>
+        <p class="hero-subtitle">
+          Upload a photo. Know exactly how to dispose it.
+        </p>
+        <p class="hero-description">
+          AI-powered waste classification using deep learning. Get instant recycling guidance.
+        </p>
+        <button class="btn-primary btn-lg" onclick="scrollToClassifier()">
+          Start Classifying →
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-number">82.84%</div>
+          <div class="stat-label">Model Accuracy</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">10+</div>
+          <div class="stat-label">Waste Types</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<section>
-  <h2>🚀 Live Demo</h2>
-  <a href="https://huggingface.co/spaces/mushfiqazam/Smart-Waste-Image-Classifier"
-     target="_blank" class="btn">
-     Try Live App
-  </a>
-</section>
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="how-it-works">
+    <div class="container">
+      <h2>How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Upload Image</h3>
+          <p>Upload or drag & drop a waste image (JPG, PNG, WEBP)</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>AI Analysis</h3>
+          <p>ResNet50 model analyzes and classifies the waste</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Get Guidance</h3>
+          <p>Receive detailed recycling/disposal instructions</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<section>
-  <h2>🧠 Technologies Used</h2>
-  <ul>
-    <li>Python</li>
-    <li>FastAI & PyTorch</li>
-    <li>ResNet50</li>
-    <li>Gradio</li>
-    <li>Hugging Face Spaces</li>
-  </ul>
-</section>
+  <!-- Classifier Section -->
+  <section id="classifier" class="classifier">
+    <div class="container">
+      <h2>Classify Your Waste</h2>
 
-<section>
-  <h2>Demo</h2>
-  <img src="assets/demo.png" alt="Smart Waste Classifier Demo">
-</section>
+      <!-- Upload Area -->
+      <div id="upload-section" class="upload-section">
+        <div id="upload-area" class="upload-area">
+          <div class="upload-icon">📸</div>
+          <h3>Drag & drop your image here</h3>
+          <p>or</p>
+          <button type="button" class="btn-secondary" onclick="document.getElementById('file-input').click()">
+            Click to browse
+          </button>
+          <p class="upload-hint">Supported: JPG, PNG, WEBP (Max 10MB)</p>
+          <input type="file" id="file-input" hidden accept="image/jpeg,image/png,image/webp">
+        </div>
 
-<footer>
-  <p>Developed by Mushfiq Azam | 2026</p>
-</footer>
+        <!-- Image Preview -->
+        <div id="preview-section" class="preview-section hidden">
+          <img id="preview-image" src="" alt="Preview">
+          <button class="btn-remove" onclick="resetClassifier()" title="Remove image">✕</button>
+        </div>
+      </div>
+
+      <!-- Loading Spinner -->
+      <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+        <p>Analyzing image...</p>
+      </div>
+
+      <!-- Result Section -->
+      <div id="result-section" class="result-section hidden">
+        <div class="result-card">
+          <div class="result-header">
+            <h3>Prediction Result</h3>
+          </div>
+
+          <div class="result-content">
+            <!-- Waste Category -->
+            <div class="category-display">
+              <div id="category-badge" class="category-badge">
+                <span id="category-label">Loading...</span>
+              </div>
+            </div>
+
+            <!-- Confidence -->
+            <div class="confidence-section">
+              <div class="confidence-label">
+                <span>Confidence</span>
+                <span id="confidence-percent">0%</span>
+              </div>
+              <div class="confidence-bar-container">
+                <div id="confidence-bar" class="confidence-bar" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <!-- Recyclable Status -->
+            <div id="recyclable-status" class="recyclable-status">
+              <span id="recyclable-icon">♻️</span>
+              <span id="recyclable-text">Recyclable</span>
+            </div>
+
+            <!-- Guidance -->
+            <div class="guidance-section">
+              <h4>♻️ Disposal Guidance</h4>
+              <p id="guidance-text">Loading guidance...</p>
+            </div>
+
+            <!-- Tips -->
+            <div id="tips-section" class="tips-section">
+              <h4>💡 Tips</h4>
+              <ul id="tips-list">
+                <li>Check local guidelines</li>
+              </ul>
+            </div>
+
+            <!-- Low Confidence Warning -->
+            <div id="low-confidence-warning" class="warning hidden">
+              <span class="warning-icon">⚠️</span>
+              <span>Low confidence detected. Try a clearer photo for better results.</span>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="result-actions">
+            <button class="btn-primary" onclick="resetClassifier()">
+              🔄 Try Another Image
+            </button>
+            <button class="btn-secondary" id="share-btn" onclick="shareResult()">
+              📤 Share Result
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div id="error-message" class="error-message hidden">
+        <span class="error-icon">❌</span>
+        <span id="error-text">An error occurred</span>
+        <button class="error-close" onclick="closeError()">✕</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="footer" class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>About</h4>
+          <p>AI-powered waste classification using deep learning (ResNet50) to promote sustainable waste management.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Technology</h4>
+          <ul>
+            <li>ResNet50 Model</li>
+            <li>FastAPI Backend</li>
+            <li>PyTorch Framework</li>
+            <li>FastAI Library</li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Links</h4>
+          <ul>
+            <li><a href="https://github.com/Mushfiq-Azam/smart-waste-image-classifier" target="_blank">GitHub
+                Repository</a></li>
+            <li><a href="https://github.com/Mushfiq-Azam" target="_blank">Developer</a></li>
+            <li><a href="#" target="_blank">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Smart Waste Classifier | Built by Mushfiq Azam</p>
+        <p>Model Accuracy: 82.84% | ResNet50 Transfer Learning</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/app.js"></script>
 
 </body>
+
 </html>
