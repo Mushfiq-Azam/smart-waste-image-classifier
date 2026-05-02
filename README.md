@@ -237,6 +237,30 @@ ALLOWED_ORIGINS=http://localhost:3000,https://mushfiq-azam.github.io
 | Classes | 10 waste types |
 
 ---
+## 📊 Model Accuracy Comparison
+
+To evaluate the effectiveness of different deep learning architectures, multiple models were tested on the waste image classification task.  
+The comparison below highlights the performance improvement gained through transfer learning.
+
+| Model Architecture | Training Approach | Accuracy |
+|-------------------|------------------|----------|
+| Custom CNN (Baseline) | Trained from scratch | 71.2% |
+| MobileNetV2 | Transfer Learning | 78.6% |
+| **ResNet50 (Final Model)** | **Transfer Learning (FastAI)** | **82.84%** |
+
+---
+
+### 📈 Analysis of Results
+
+- **Custom CNN** achieved lower accuracy due to limited depth and lack of pretrained features.
+- **MobileNetV2** improved performance by leveraging pretrained weights while maintaining lightweight architecture.
+- **ResNet50** delivered the **highest accuracy (82.84%)**, benefiting from deeper residual connections and stronger feature extraction.
+
+---
+
+### 🏆 Final Model Selection
+
+Based on accuracy, robustness, and real-world performance, **ResNet50** was selected as the final deployment model for this project.
 
 ## 👨‍💻 Development
 
