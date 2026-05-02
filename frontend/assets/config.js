@@ -5,18 +5,18 @@
 
 const CONFIG = {
   development: {
-    API_URL: "http://localhost:8000",
+    API_URL: "https://mushfiqazam-smart-waste-image-classifier-02.hf.space/predict",
     LOG_LEVEL: "debug",
     ENVIRONMENT: "Development"
   },
   production: {
-    API_URL: "https://smart-waste-classifier.onrender.com",
+    API_URL: "https://mushfiqazam-smart-waste-image-classifier-02.hf.space/predict",
     LOG_LEVEL: "info",
     ENVIRONMENT: "Production"
   },
   // GitHub Pages specific config
   githubPages: {
-    API_URL: "https://smart-waste-classifier.onrender.com",
+    API_URL: "https://mushfiqazam-smart-waste-image-classifier-02.hf.space/predict",
     LOG_LEVEL: "info",
     ENVIRONMENT: "GitHub Pages"
   }

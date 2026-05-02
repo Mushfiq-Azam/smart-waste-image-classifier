@@ -130,12 +130,12 @@ function handleFileSelect(file) {
 
 function validateFile(file) {
   const maxSize = 10 * 1024 * 1024;
-  const validTypes = ["image/jpeg", "image/png", "image/webp"];
+  const validTypes = ["image/jpeg", "image/png"];
 
   if (!validTypes.includes(file.type)) {
     return {
       valid: false,
-      message: `Invalid file type. Supported: JPG, PNG, WEBP`,
+      message: `Invalid file type. Supported: JPG, PNG`,
     };
   }
 
@@ -162,24 +162,16 @@ async function classifyImage(file) {
     const formData = new FormData();
     formData.append("file", file);
 
-    const response = await fetch(`${API_URL}/predict`, {
+    const response = await fetch(API_URL, {
       method: "POST",
       body: formData,
     });
 
     if (!response.ok) {
-      let message = `Request failed with status ${response.status}`;
-      try {
-        const errorBody = await response.json();
-        message = errorBody.detail || message;
-      } catch (_) {
-        const errorText = await response.text();
-        message = errorText || message;
-      }
-      throw new Error(message);
+      throw new Error(await getResponseErrorMessage(response));
     }
 
-    const result = await response.json();
+    const result = normalizeApiResult(await response.json());
     currentResult = result;
 
     addToHistory(result);
@@ -193,8 +185,66 @@ async function classifyImage(file) {
   }
 }
 
+async function getResponseErrorMessage(response) {
+  const fallbackMessage = `Request failed with status ${response.status}`;
+  const responseText = await response.text();
+
+  if (!responseText) {
+    return fallbackMessage;
+  }
+
+  try {
+    const errorBody = JSON.parse(responseText);
+    return errorBody.detail || errorBody.error || errorBody.message || fallbackMessage;
+  } catch (_) {
+    return responseText;
+  }
+}
+
+function normalizeApiResult(apiResult) {
+  const category = apiResult.category || apiResult.prediction || "unknown";
+  const rawConfidence = Number(apiResult.confidence) || 0;
+  const confidence = rawConfidence > 1 ? rawConfidence / 100 : rawConfidence;
+
+  return {
+    category,
+    confidence,
+    color: apiResult.color || getCategoryColor(category),
+    is_recyclable:
+      typeof apiResult.is_recyclable === "boolean"
+        ? apiResult.is_recyclable
+        : isLikelyRecyclable(category, apiResult.info),
+    guidance: apiResult.guidance || apiResult.info || "Check local disposal guidance for this item.",
+  };
+}
+
+function getCategoryColor(category) {
+  const normalizedCategory = getTipCategory(category);
+  const colors = {
+    plastic: "#3498db",
+    glass: "#1abc9c",
+    metal: "#95a5a6",
+    paper: "#f1c40f",
+    cardboard: "#d35400",
+    food_waste: "#27ae60",
+    battery: "#e74c3c",
+    e_waste: "#9b59b6",
+    textile: "#e67e22",
+    medical_waste: "#c0392b",
+  };
+
+  return colors[normalizedCategory] || "#2ecc71";
+}
+
+function isLikelyRecyclable(category, info = "") {
+  const text = `${category} ${info}`.toLowerCase();
+  const specialDisposalKeywords = ["battery", "e_waste", "medical", "hazard", "special disposal"];
+
+  return !specialDisposalKeywords.some((keyword) => text.includes(keyword));
+}
+
 function displayResult(result) {
-  const category = result.category.toLowerCase();
+  const category = getTipCategory(result.category);
 
   DOM.categoryLabel.textContent = formatCategoryName(result.category);
   DOM.categoryBadge.style.backgroundColor = result.color;
@@ -289,7 +339,24 @@ function getCategoryTips(category) {
     ],
   };
 
-  return tips[category] || ["Check local waste management guidelines"];
+  return tips[getTipCategory(category)] || ["Check local waste management guidelines"];
+}
+
+function getTipCategory(category) {
+  const normalizedCategory = String(category || "").toLowerCase();
+
+  if (normalizedCategory.includes("plastic")) return "plastic";
+  if (normalizedCategory.includes("glass")) return "glass";
+  if (normalizedCategory.includes("metal") || normalizedCategory.includes("can")) return "metal";
+  if (normalizedCategory.includes("paper")) return "paper";
+  if (normalizedCategory.includes("cardboard") || normalizedCategory.includes("carton")) return "cardboard";
+  if (normalizedCategory.includes("food") || normalizedCategory.includes("organic")) return "food_waste";
+  if (normalizedCategory.includes("battery")) return "battery";
+  if (normalizedCategory.includes("e_waste") || normalizedCategory.includes("electronic")) return "e_waste";
+  if (normalizedCategory.includes("textile") || normalizedCategory.includes("clothes")) return "textile";
+  if (normalizedCategory.includes("medical")) return "medical_waste";
+
+  return normalizedCategory;
 }
 
 function formatCategoryName(category) {
@@ -440,12 +507,5 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function checkApiConnection() {
-  try {
-    const response = await fetch(`${API_URL}/health`);
-    if (!response.ok) {
-      console.warn("API might not be available");
-    }
-  } catch (error) {
-    console.warn("API not available:", error.message);
-  }
+  log(`Using API endpoint: ${API_URL}`, "debug");
 }

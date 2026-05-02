@@ -87,7 +87,7 @@
         <div class="step">
           <div class="step-number">1</div>
           <h3>Upload Image</h3>
-          <p>Upload or drag & drop a waste image (JPG, PNG, WEBP)</p>
+          <p>Upload or drag & drop a waste image (JPG, PNG)</p>
         </div>
         <div class="step">
           <div class="step-number">2</div>
@@ -117,14 +117,14 @@
           <button type="button" class="btn-secondary" onclick="document.getElementById('file-input').click()">
             Click to browse
           </button>
-          <p class="upload-hint">Supported: JPG, PNG, WEBP (Max 10MB)</p>
+          <p class="upload-hint">Supported: JPG, PNG (Max 10MB)</p>
           <div class="upload-options">
             <button type="button" class="btn-upload-option" onclick="startCamera()" id="camera-btn" title="Take a photo">
               📷 Camera
             </button>
           </div>
-          <input type="file" id="file-input" hidden accept="image/jpeg,image/png,image/webp">
-          <input type="file" id="camera-input" hidden accept="image/*" capture="environment">
+          <input type="file" id="file-input" hidden accept="image/jpeg,image/png">
+          <input type="file" id="camera-input" hidden accept="image/jpeg,image/png" capture="environment">
         </div>
 
         <!-- Image Preview -->
