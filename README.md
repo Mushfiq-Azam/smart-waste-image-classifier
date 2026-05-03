@@ -72,7 +72,7 @@ Visit: https://mushfiq-azam.github.io/smart-waste-image-classifier/
 
 Add or replace the screenshot below with the latest UI output when the interface changes:
 
-![Smart Waste Classifier UI output placeholder](frontend/assets/demo.png)
+![Smart Waste Classifier UI output placeholder](frontend/assets/demo1.png)
 
 ---
 
