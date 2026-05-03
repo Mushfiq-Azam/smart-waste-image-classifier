@@ -12,38 +12,64 @@ Upload a waste image and instantly get recycling/disposal guidance with 82.84% a
 
 ```text
 smart-waste-image-classifier/
-|-- frontend/                         Web UI
-|   |-- index.html                     Main application page
-|   |-- style.css                      UI styling and responsive layout
-|   `-- assets/
-|       |-- app.js                     Upload, preview, API, and UI logic
-|       |-- config.js                  API URL and environment config
-|       `-- demo.png                   Demo/UI screenshot asset
-|-- docs/                              API and project documentation
-|   |-- API.md
-|   `-- api_guide.md
-|-- config/                            Configuration templates
-|-- notebooks/                         Data collection, cleaning, training notebooks
-|-- website/                           Extra/static website copy
-|-- smart-waste-image-classifier/       Legacy/project export copy
-|-- QUICKSTART.md                      Local setup notes
-|-- DEPLOYMENT.md                      Deployment guide
-|-- GITHUB_PAGES.md                    GitHub Pages guide
-|-- TESTING.md                         Testing checklist
-|-- Procfile                           Render-style process file
-|-- render.yaml                        Render service config
-|-- runtime.txt                        Python runtime pin
-|-- README.md
-`-- LICENSE
+│
+├── 📁 frontend/                ← Web UI (HTML, CSS, JS)
+│   ├── index.html              Main landing page
+│   ├── style.css               Global styles & theme
+│   └── assets/
+│       ├── app.js              Frontend logic
+│       ├── config.js           Environment config
+│       └── demo.png            Demo screenshot
+│
+├── 📁 backend/                 ← FastAPI server
+│   ├── app/
+│   │   ├── main.py             FastAPI app & endpoints
+│   │   ├── categories.py       Waste categories & guidance
+│   │   ├── utils.py            Image validation/processing
+│   │   ├── startup.py          Model initialization
+│   │   └── __init__.py         Package init
+│   ├── requirements.txt        Python dependencies
+│   ├── Procfile                Render deployment config
+│   ├── runtime.txt             Python version
+│   └── render.yaml             Render service config
+│
+├── 📁 docs/                    ← Documentation
+│   ├── README.md               Full project documentation
+│   ├── QUICKSTART.md           Local development guide
+│   ├── DEPLOYMENT.md           Render backend setup
+│   ├── GITHUB_PAGES.md         GitHub Pages deployment
+│   ├── TESTING.md              QA testing checklist
+│   └── API.md                  Backend API reference
+│
+├── 📁 config/                  ← Configuration templates
+│   └── .env.example            Environment variables
+│
+├── 📁 notebooks/               ← ML training notebooks
+│   ├── 01_data_collection.ipynb
+│   ├── 02_data_cleaning.ipynb
+│   └── 03_model_training.ipynb
+│
+├── .gitignore                  Git ignore rules
+├── model_fixed.pkl             Trained ResNet50 model
+└── LICENSE                     MIT License
+
 ```
 
 ---
 
 ## Quick Start
 
-### Run the Frontend Locally
+### **Option 1: Local Development**
 
 ```bash
+# Backend
+cd backend
+python -m venv venv
+venv\Scripts\activate  # or: source venv/bin/activate
+pip install -r requirements.txt
+python -m uvicorn app.main:app --reload
+
+# Frontend (new terminal)
 cd frontend
 python -m http.server 8080
 ```
@@ -130,9 +156,15 @@ Add or replace the screenshot below with the latest UI output when the interface
 - Deployed prediction service through Hugging Face Spaces
 
 **Deployment**
-- GitHub Pages for the static frontend
-- Hugging Face Space API endpoint configured in `frontend/assets/config.js`
-- Render config files are included for alternate Python service deployment
+- GitHub Pages (frontend)
+- Render (backend)
+- GitHub Actions (CI/CD ready)
+
+**Model**
+- Architecture: ResNet50
+- Training: Transfer Learning
+- Accuracy: 82.84%
+- Framework: FastAI + PyTorch
 
 ---
 
