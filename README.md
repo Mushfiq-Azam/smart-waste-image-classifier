@@ -216,19 +216,6 @@ ALLOWED_ORIGINS=http://localhost:3000,https://mushfiq-azam.github.io
 
 # See config/.env.example for full list
 ```
-
----
-
-## 📊 Model Performance
-
-| Metric | Value |
-|--------|-------|
-| Accuracy | 82.84% |
-| Architecture | ResNet50 |
-| Training | Transfer Learning |
-| Dataset | 1,500+ images |
-| Classes | 10 waste types |
-
 ---
 ## 📊 Model Accuracy Comparison
 
@@ -355,6 +342,7 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 **Mushfiq Azam**
 
 - GitHub: [@Mushfiq-Azam](https://github.com/Mushfiq-Azam)
+- Email:  mushfiq.azam7860@gmail.com
 
 ---
 
