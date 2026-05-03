@@ -8,78 +8,63 @@ Upload a waste image and instantly get recycling/disposal guidance with 82.84% a
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
-```
+```text
 smart-waste-image-classifier/
-│
-├── 📁 frontend/                ← Web UI (HTML, CSS, JS)
-│   ├── index.html              Main landing page
-│   ├── style.css               Global styles & theme
-│   └── assets/
-│       ├── app.js              Frontend logic
-│       ├── config.js           Environment config
-│       └── demo.png            Demo screenshot
-│
-├── 📁 backend/                 ← FastAPI server
-│   ├── app/
-│   │   ├── main.py             FastAPI app & endpoints
-│   │   ├── categories.py       Waste categories & guidance
-│   │   ├── utils.py            Image validation/processing
-│   │   ├── startup.py          Model initialization
-│   │   └── __init__.py         Package init
-│   ├── requirements.txt        Python dependencies
-│   ├── Procfile                Render deployment config
-│   ├── runtime.txt             Python version
-│   └── render.yaml             Render service config
-│
-├── 📁 docs/                    ← Documentation
-│   ├── README.md               Full project documentation
-│   ├── QUICKSTART.md           Local development guide
-│   ├── DEPLOYMENT.md           Render backend setup
-│   ├── GITHUB_PAGES.md         GitHub Pages deployment
-│   ├── TESTING.md              QA testing checklist
-│   └── API.md                  Backend API reference
-│
-├── 📁 config/                  ← Configuration templates
-│   └── .env.example            Environment variables
-│
-├── 📁 notebooks/               ← ML training notebooks
-│   ├── 01_data_collection.ipynb
-│   ├── 02_data_cleaning.ipynb
-│   └── 03_model_training.ipynb
-│
-├── .gitignore                  Git ignore rules
-├── model_fixed.pkl             Trained ResNet50 model
-└── LICENSE                     MIT License
-
+|-- frontend/                         Web UI
+|   |-- index.html                     Main application page
+|   |-- style.css                      UI styling and responsive layout
+|   `-- assets/
+|       |-- app.js                     Upload, preview, API, and UI logic
+|       |-- config.js                  API URL and environment config
+|       `-- demo.png                   Demo/UI screenshot asset
+|-- docs/                              API and project documentation
+|   |-- API.md
+|   `-- api_guide.md
+|-- config/                            Configuration templates
+|-- notebooks/                         Data collection, cleaning, training notebooks
+|-- website/                           Extra/static website copy
+|-- smart-waste-image-classifier/       Legacy/project export copy
+|-- QUICKSTART.md                      Local setup notes
+|-- DEPLOYMENT.md                      Deployment guide
+|-- GITHUB_PAGES.md                    GitHub Pages guide
+|-- TESTING.md                         Testing checklist
+|-- Procfile                           Render-style process file
+|-- render.yaml                        Render service config
+|-- runtime.txt                        Python runtime pin
+|-- README.md
+`-- LICENSE
 ```
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
-### **Option 1: Local Development**
+### Run the Frontend Locally
 
 ```bash
-# Backend
-cd backend
-python -m venv venv
-venv\Scripts\activate  # or: source venv/bin/activate
-pip install -r requirements.txt
-python -m uvicorn app.main:app --reload
-
-# Frontend (new terminal)
 cd frontend
 python -m http.server 8080
-# Open: http://localhost:8080
 ```
 
-### **Option 2: Deploy to Production**
+Open `http://localhost:8080` in your browser.
 
-**Backend to Render**: See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
+The current frontend API endpoint is configured in `frontend/assets/config.js` and points to the deployed Hugging Face Space prediction API:
 
-**Frontend to GitHub Pages**: See [docs/GITHUB_PAGES.md](docs/GITHUB_PAGES.md)
+```text
+https://mushfiqazam-smart-waste-image-classifier-02.hf.space/predict
+```
+
+### Try the Live App
+
+Visit: https://mushfiq-azam.github.io/smart-waste-image-classifier/
+
+### UI Output Preview
+
+Add or replace the screenshot below with the latest UI output when the interface changes:
+
+![Smart Waste Classifier UI output placeholder](frontend/assets/demo.png)
 
 ---
 
@@ -129,31 +114,25 @@ python -m http.server 8080
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 **Frontend**
-- HTML5, CSS3, Vanilla JavaScript
-- Responsive design
-- LocalStorage for persistence
-- Fetch API for backend calls
+- HTML5
+- CSS3
+- Vanilla JavaScript
+- Browser `fetch` API for prediction requests
+- LocalStorage for theme/history-style client persistence
 
-**Backend**
-- Python 3.11+
-- FastAPI web framework
-- PyTorch + FastAI
+**AI / Model**
 - ResNet50 transfer learning
-- Uvicorn ASGI server
+- FastAI + PyTorch training workflow
+- Notebook-based data collection, cleaning, and model training
+- Deployed prediction service through Hugging Face Spaces
 
 **Deployment**
-- GitHub Pages (frontend)
-- Render (backend)
-- GitHub Actions (CI/CD ready)
-
-**Model**
-- Architecture: ResNet50
-- Training: Transfer Learning
-- Accuracy: 82.84%
-- Framework: FastAI + PyTorch
+- GitHub Pages for the static frontend
+- Hugging Face Space API endpoint configured in `frontend/assets/config.js`
+- Render config files are included for alternate Python service deployment
 
 ---
 
@@ -262,53 +241,71 @@ The comparison below highlights the performance improvement gained through trans
 
 Based on accuracy, robustness, and real-world performance, **ResNet50** was selected as the final deployment model for this project.
 
-## 👨‍💻 Development
+## Development
 
 ### Setup Development Environment
 
 ```bash
-# Clone repo
 git clone https://github.com/Mushfiq-Azam/smart-waste-image-classifier
 cd smart-waste-image-classifier
 
-# Backend dev setup
-cd backend
-python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
-pip install -r requirements.txt
+cd frontend
+python -m http.server 8080
+```
 
-# Frontend dev setup
-cd ../frontend
-# Just open index.html or use python -m http.server
+Open `http://localhost:8080`, upload a waste image, and confirm the request is sent to the API URL in `frontend/assets/config.js`.
+
+When changing the prediction API, update this file:
+
+```text
+frontend/assets/config.js
 ```
 
 ### File Structure for Development
 
-- **frontend/** - All UI code here
-- **backend/** - All server code here
-- **docs/** - All documentation here
-- **notebooks/** - Training & analysis here
+- `frontend/index.html` - Main UI markup.
+- `frontend/style.css` - Layout, theme, responsive styles, and visual polish.
+- `frontend/assets/app.js` - Upload handling, preview, API calls, result rendering, history, and sharing.
+- `frontend/assets/config.js` - Development, production, and GitHub Pages API URLs.
+- `frontend/assets/demo.png` - README/demo screenshot asset.
+- `notebooks/` - Data preparation and model training notebooks.
+- `docs/` - API and project documentation.
+- `config/` - Environment/configuration examples.
+- `website/` and `smart-waste-image-classifier/` - Additional static or exported project copies kept in the repository.
 
 ---
 
-## 🚀 Deployment
+## Deployment
 
-### Backend → Render
+### Frontend: GitHub Pages
 
-1. Connect GitHub repo to Render
-2. Set build command: `pip install -r backend/requirements.txt`
-3. Set start command: `uvicorn backend.app.main:app --host 0.0.0.0`
-4. Deploy!
+1. Confirm the deployed API endpoint in `frontend/assets/config.js`.
+2. Push changes to the GitHub repository.
+3. Publish the `frontend/` static files with GitHub Pages.
+4. Test the live URL: https://mushfiq-azam.github.io/smart-waste-image-classifier/
 
-See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed steps.
+See [GITHUB_PAGES.md](GITHUB_PAGES.md) for detailed steps.
 
-### Frontend → GitHub Pages
+### Prediction API: Hugging Face Space
 
-1. Update API URL in `frontend/assets/config.js`
-2. Push to `main` branch
-3. GitHub Pages auto-deploys
+The frontend currently sends prediction requests to:
 
-See [docs/GITHUB_PAGES.md](docs/GITHUB_PAGES.md) for detailed steps.
+```text
+https://mushfiqazam-smart-waste-image-classifier-02.hf.space/predict
+```
+
+If the API URL changes, update all environment entries in `frontend/assets/config.js`.
+
+### Alternate Backend Deployment: Render
+
+Render support files are present at the repository root:
+
+- `Procfile`
+- `render.yaml`
+- `runtime.txt`
+- `DEPLOYMENT.md`
+
+Use these only if you add or maintain a compatible Python backend entry point for the Render commands.
 
 ---
 
