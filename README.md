@@ -355,6 +355,7 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 **Mushfiq Azam**
 
 - GitHub: [@Mushfiq-Azam](https://github.com/Mushfiq-Azam)
+- Email:  mushfiq.azam7860@gmail.com
 
 ---
 
