@@ -19,17 +19,17 @@ smart-waste-image-classifier/
 |       |-- app.js                     Upload, preview, API, and UI logic
 |       |-- config.js                  API URL and environment config
 |       `-- demo.png                   Demo/UI screenshot asset
-|-- docs/                              API and project documentation
-|   |-- API.md
-|   `-- api_guide.md
+|-- document/                          Markdown documentation
+|   |-- API.md                         Backend/API reference
+|   |-- api_guide.md                   API usage guide
+|   |-- DEPLOYMENT.md                  Deployment guide
+|   |-- GITHUB_PAGES.md                GitHub Pages guide
+|   |-- QUICKSTART.md                  Local setup notes
+|   `-- TESTING.md                     Testing checklist
 |-- config/                            Configuration templates
 |-- notebooks/                         Data collection, cleaning, training notebooks
 |-- website/                           Extra/static website copy
 |-- smart-waste-image-classifier/       Legacy/project export copy
-|-- QUICKSTART.md                      Local setup notes
-|-- DEPLOYMENT.md                      Deployment guide
-|-- GITHUB_PAGES.md                    GitHub Pages guide
-|-- TESTING.md                         Testing checklist
 |-- Procfile                           Render-style process file
 |-- render.yaml                        Render service config
 |-- runtime.txt                        Python runtime pin
@@ -154,12 +154,12 @@ Visit: https://mushfiq-azam.github.io/smart-waste-image-classifier/
 
 | Document | Purpose |
 |----------|---------|
-| [docs/README.md](docs/README.md) | Full project documentation |
-| [docs/QUICKSTART.md](docs/QUICKSTART.md) | Local setup & testing |
-| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Backend deployment guide |
-| [docs/GITHUB_PAGES.md](docs/GITHUB_PAGES.md) | Frontend deployment guide |
-| [docs/TESTING.md](docs/TESTING.md) | QA testing checklist |
-| [docs/API.md](docs/API.md) | Backend API reference |
+| [document/QUICKSTART.md](document/QUICKSTART.md) | Local setup & testing |
+| [document/DEPLOYMENT.md](document/DEPLOYMENT.md) | Backend deployment guide |
+| [document/GITHUB_PAGES.md](document/GITHUB_PAGES.md) | Frontend deployment guide |
+| [document/TESTING.md](document/TESTING.md) | QA testing checklist |
+| [document/API.md](document/API.md) | Backend API reference |
+| [document/api_guide.md](document/api_guide.md) | API usage guide |
 
 ---
 
@@ -192,7 +192,7 @@ GET /docs                ← Interactive API docs (Swagger UI)
 Run the comprehensive test suite:
 
 ```bash
-# See docs/TESTING.md for full checklist
+# See document/TESTING.md for full checklist
 ```
 
 Tests cover:
@@ -283,7 +283,7 @@ frontend/assets/config.js
 - `frontend/assets/config.js` - Development, production, and GitHub Pages API URLs.
 - `frontend/assets/demo.png` - README/demo screenshot asset.
 - `notebooks/` - Data preparation and model training notebooks.
-- `docs/` - API and project documentation.
+- `document/` - Markdown documentation, API notes, deployment notes, quick start, and testing guide.
 - `config/` - Environment/configuration examples.
 - `website/` and `smart-waste-image-classifier/` - Additional static or exported project copies kept in the repository.
 
@@ -298,7 +298,7 @@ frontend/assets/config.js
 3. Publish the `frontend/` static files with GitHub Pages.
 4. Test the live URL: https://mushfiq-azam.github.io/smart-waste-image-classifier/
 
-See [GITHUB_PAGES.md](GITHUB_PAGES.md) for detailed steps.
+See [document/GITHUB_PAGES.md](document/GITHUB_PAGES.md) for detailed steps.
 
 ### Prediction API: Hugging Face Space
 
@@ -317,7 +317,7 @@ Render support files are present at the repository root:
 - `Procfile`
 - `render.yaml`
 - `runtime.txt`
-- `DEPLOYMENT.md`
+- `document/DEPLOYMENT.md`
 
 Use these only if you add or maintain a compatible Python backend entry point for the Render commands.
 
@@ -370,7 +370,7 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 
 ## 📞 Support
 
-- 📖 Read [docs/](docs/) for detailed guides
+- 📖 Read [document/](document/) for detailed guides
 - 🐛 Report issues on [GitHub Issues](https://github.com/Mushfiq-Azam/smart-waste-image-classifier/issues)
 - 💬 Start a [GitHub Discussion](https://github.com/Mushfiq-Azam/smart-waste-image-classifier/discussions)
 

@@ -376,7 +376,7 @@ CORS_ORIGINS=https://example.com
 
 ## Support
 
-- 📖 See [README.md](README.md) for project overview
+- 📖 See [README.md](../README.md) for project overview
 - 🚀 See [DEPLOYMENT.md](DEPLOYMENT.md) for setup
 - 🧪 See [TESTING.md](TESTING.md) for testing
 - 💬 GitHub Issues for bug reports

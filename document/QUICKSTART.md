@@ -159,7 +159,7 @@ smart-waste-image-classifier/
 
 ## Next Steps
 
-- Read [README.md](README.md) for full documentation
+- Read [README.md](../README.md) for full documentation
 - Check [DEPLOYMENT.md](DEPLOYMENT.md) for production deployment
 - See [app/categories.py](app/categories.py) for waste types
 - Explore `assets/app.js` to customize behavior
